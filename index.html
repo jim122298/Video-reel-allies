@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+
+<style>
+html,body{
+  margin:0;
+  padding:0;
+  overflow:hidden;
+  background:transparent;
+  font-family:Segoe UI, Arial, sans-serif;
+}
+
+.timeline-wrap{
+  width:100%;
+  overflow:hidden;
+  background:transparent;
+  padding:8px 0;
+}
+
+.track{
+  display:flex;
+  gap:18px;
+  width:max-content;
+  will-change:transform;
+}
+
+.video-card{
+  width:300px;
+  flex:0 0 auto;
+  text-decoration:none;
+  color:#094876;
+}
+
+.poster{
+  position:relative;
+  border-radius:18px;
+  overflow:hidden;
+  border:3px solid #094876;
+  box-shadow:0 12px 28px rgba(0,0,0,.18);
+  background:transparent;
+}
+
+.poster img{
+  width:100%;
+  aspect-ratio:16/9;
+  object-fit:cover;
+  display:block;
+  transition:.35s ease;
+}
+
+.video-card:hover .poster img{
+  transform:scale(1.045);
+}
+
+.video-card:hover{
+  transform:translateY(-4px);
+}
+
+.year{
+  position:absolute;
+  top:10px;
+  left:10px;
+  background:#F19F01;
+  color:white;
+  font-size:11px;
+  font-weight:800;
+  padding:5px 10px;
+  border-radius:999px;
+}
+
+.info{
+  padding:9px 3px 0;
+}
+
+.title{
+  font-size:15px;
+  font-weight:800;
+  line-height:1.22;
+  color:#094876;
+  white-space:normal;
+}
+
+.date{
+  margin-top:3px;
+  font-size:12px;
+  font-weight:700;
+  color:#D75318;
+}
+
+.timeline-wrap:hover .track{
+  animation-play-state:paused;
+}
+</style>
+</head>
+
+<body>
+
+<div class="timeline-wrap" id="timeline">
+  <div class="track" id="track"></div>
+</div>
+
+<script>
+const videos = [
+  {
+    title:"Project Grow",
+    year:"2014",
+    date:"Jan. 14, 2014",
+    video:"https://woodsorg.sharepoint.com/sites/AlliesHome/Lists/Allies%20Digital%20Archive/Attachments/52/20140114%20-%20Project%20Grow.mp4?web=1",
+    image:"https://woodsorg.sharepoint.com/sites/AlliesHome/_api/v2.1/sites('397e86cc-e81c-4a84-872b-0ec35dda80bb,a77bbbfc-7bb5-479b-8e38-c67b3951cba1')/lists('8aecd2ca-8ad0-44ef-bdf9-f4cc9acaee09')/items('52')/attachments('Reserved_ImageAttachment_%5B14%5D_%5BThumbnailImage%5D%5B32%5D_%5Bb67bd77b5a334c758308a6fe9cd52b1c%5D%5B1%5D_%5B2%5D.png')/thumbnails/0/c3000x2000/content?prefer=noredirect%2Cclosestavailablesize"
+  },
+  {
+    title:"Greensleeves",
+    year:"2014",
+    date:"Jan. 14, 2014",
+    video:"https://woodsorg.sharepoint.com/sites/AlliesHome/Lists/Allies%20Digital%20Archive/Attachments/58/20140114%20-%20Greensleeves.mp4?web=1",
+    image:"https://woodsorg.sharepoint.com/sites/AlliesHome/_api/v2.1/sites('397e86cc-e81c-4a84-872b-0ec35dda80bb,a77bbbfc-7bb5-479b-8e38-c67b3951cba1')/lists('8aecd2ca-8ad0-44ef-bdf9-f4cc9acaee09')/items('58')/attachments('Reserved_ImageAttachment_%5B14%5D_%5BThumbnailImage%5D%5B32%5D_%5B802e21faf3e743aa8bf9be8870829f5f%5D%5B1%5D_%5B2%5D.png')/thumbnails/0/c3000x2000/content?prefer=noredirect%2Cclosestavailablesize"
+  },
+  {
+    title:"Allies, Inc. 2009 Gala Slideshow",
+    year:"2009",
+    date:"Uploaded Feb. 17, 2014",
+    video:"https://woodsorg.sharepoint.com/sites/AlliesHome/Lists/Allies%20Digital%20Archive/Attachments/59/20140217%20-%20Allies,%20Inc.%202009%20Gala%20Slideshow.mp4",
+    image:"https://woodsorg.sharepoint.com/sites/AlliesHome/_api/v2.1/sites('397e86cc-e81c-4a84-872b-0ec35dda80bb,a77bbbfc-7bb5-479b-8e38-c67b3951cba1')/lists('8aecd2ca-8ad0-44ef-bdf9-f4cc9acaee09')/items('59')/attachments('Reserved_ImageAttachment_%5B14%5D_%5BThumbnailImage%5D%5B32%5D_%5B6aa57483899a44e8891e040f9cf267d5%5D%5B1%5D_%5B2%5D.png')/thumbnails/0/c3000x2000/content?prefer=noredirect%2Cclosestavailablesize"
+  },
+  {
+    title:"Allies, Inc. Residential Services",
+    year:"2014",
+    date:"May 23, 2014",
+    video:"https://woodsorg.sharepoint.com/sites/AlliesHome/Lists/Allies%20Digital%20Archive/Attachments/60/Allies,%20Inc.%20Residential%20Services.mp4?web=1",
+    image:"https://woodsorg.sharepoint.com/sites/AlliesHome/_api/v2.1/sites('397e86cc-e81c-4a84-872b-0ec35dda80bb,a77bbbfc-7bb5-479b-8e38-c67b3951cba1')/lists('8aecd2ca-8ad0-44ef-bdf9-f4cc9acaee09')/items('60')/attachments('Reserved_ImageAttachment_%5B14%5D_%5BThumbnailImage%5D%5B32%5D_%5B3c82928d2115432cba545fc62173f809%5D%5B1%5D_%5B1%5D.png')/thumbnails/0/c3000x2000/content?prefer=noredirect%2Cclosestavailablesize"
+  }
+];
+
+const timeline = document.getElementById("timeline");
+const track = document.getElementById("track");
+
+let paused = false;
+let x = 0;
+let speed = 0.45;
+
+function makeCard(item){
+  const a = document.createElement("a");
+  a.className = "video-card";
+  a.href = item.video;
+  a.target = "_blank";
+  a.rel = "noopener noreferrer";
+
+  a.innerHTML = `
+    <div class="poster">
+      <img src="${item.image}" alt="">
+      <div class="year">${item.year}</div>
+    </div>
+    <div class="info">
+      <div class="title">${item.title}</div>
+      <div class="date">${item.date}</div>
+    </div>
+  `;
+
+  return a;
+}
+
+for(let i=0;i<10;i++){
+  videos.forEach(v => track.appendChild(makeCard(v)));
+}
+
+timeline.addEventListener("mouseenter",()=>paused=true);
+timeline.addEventListener("mouseleave",()=>paused=false);
+
+function animate(){
+  if(!paused && track.children.length){
+    x -= speed;
+
+    const first = track.children[0];
+    const firstWidth = first.offsetWidth + 18;
+
+    if(Math.abs(x) >= firstWidth){
+      track.appendChild(first);
+      x += firstWidth;
+    }
+
+    track.style.transform = `translateX(${x}px)`;
+  }
+
+  requestAnimationFrame(animate);
+}
+
+window.addEventListener("load",()=>{
+  x = 0;
+  track.style.transform = "translateX(0px)";
+  requestAnimationFrame(animate);
+});
+</script>
+
+</body>
+</html>
